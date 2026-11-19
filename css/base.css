@@ -1,0 +1,272 @@
+/* ═══════════════════════════════════════════════════════════════
+   JoyPro Timer Reloaded · base.css
+   Reset, page frame, and shared controls (buttons, inputs,
+   switches, tooltips, focus).
+   ═══════════════════════════════════════════════════════════════ */
+
+*, *::before, *::after { box-sizing: border-box; }
+
+html, body {
+  height: 100%;
+  margin: 0;
+  overflow: clip;
+}
+
+body {
+  font-family: var(--font-ui);
+  font-size: 15px;
+  line-height: 1.45;
+  color: var(--ink);
+  background: var(--bg);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+  transition: background-color var(--t-slow) var(--ease-out), color var(--t-slow) var(--ease-out);
+}
+
+/* A soft wash behind the plain themes, so they're never a flat slab of color */
+html[data-theme="light"] body {
+  background:
+    radial-gradient(120% 70% at 50% 108%, rgba(240, 162, 63, .14), transparent 60%),
+    radial-gradient(90% 60% at 100% 0%, rgba(141, 92, 201, .06), transparent 70%),
+    var(--bg);
+}
+html[data-theme="dark"] body {
+  background:
+    radial-gradient(110% 70% at 50% 112%, rgba(47, 112, 201, .16), transparent 62%),
+    radial-gradient(80% 55% at 0% 0%, rgba(212, 77, 141, .07), transparent 70%),
+    var(--bg);
+}
+
+/* Components set display:grid/flex; `hidden` must still win. */
+[hidden] { display: none !important; }
+
+button, input, select, textarea { font: inherit; color: inherit; }
+button { cursor: pointer; }
+button:disabled { cursor: not-allowed; }
+img, svg { display: block; }
+kbd {
+  font-family: var(--font-ui);
+  font-size: .78em;
+  font-weight: 600;
+  letter-spacing: .02em;
+  padding: .12em .45em;
+  border-radius: 5px;
+  border: 1px solid currentColor;
+  border-bottom-width: 2px;
+  opacity: .8;
+}
+
+/* ── Layers ────────────────────────────────────────────────── */
+.scene {
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 0;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity .6s var(--ease-out);
+}
+.scene.is-on { opacity: 1; }
+
+.grain {
+  position: fixed;
+  inset: -50%;
+  z-index: 1;
+  pointer-events: none;
+  opacity: var(--grain);
+  mix-blend-mode: var(--grain-blend);
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='240' height='240'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='3' stitchTiles='stitch'/><feColorMatrix type='saturate' values='0'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");
+}
+
+/* ── Focus ─────────────────────────────────────────────────── */
+:focus { outline: none; }
+:focus-visible {
+  outline: 2px solid var(--focus);
+  outline-offset: 3px;
+  border-radius: 6px;
+}
+
+.visually-hidden {
+  position: absolute !important;
+  width: 1px; height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
+
+/* ── Icon buttons ──────────────────────────────────────────── */
+.icon-btn {
+  flex-shrink: 0;
+  width: 40px;
+  height: 40px;
+  display: inline-grid;
+  place-items: center;
+  border: 0;
+  border-radius: 50%;
+  background: transparent;
+  color: inherit;
+  transition: background var(--t-fast) var(--ease-out), transform var(--t-fast) var(--ease-out), opacity var(--t) var(--ease-out);
+}
+.icon-btn:hover { background: color-mix(in srgb, currentColor 9%, transparent); }
+.icon-btn:active { transform: scale(.92); }
+.icon-btn svg {
+  width: 20px;
+  height: 20px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.7;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+.icon-btn svg .fill { fill: currentColor; stroke: none; }
+.icon-btn-sm { width: 32px; height: 32px; }
+.icon-btn-sm svg { width: 18px; height: 18px; }
+
+/* ── Buttons ───────────────────────────────────────────────── */
+.btn {
+  flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  min-height: 40px;
+  padding: 0 16px;
+  border-radius: var(--r-pill);
+  border: 1px solid var(--card-line);
+  background: var(--card);
+  color: var(--card-ink);
+  font-weight: 560;
+  font-size: 14px;
+  letter-spacing: .005em;
+  white-space: nowrap;
+  transition: background var(--t-fast) var(--ease-out), border-color var(--t-fast) var(--ease-out),
+    transform var(--t-fast) var(--ease-out), box-shadow var(--t-fast) var(--ease-out), opacity var(--t-fast);
+}
+.btn:hover { background: var(--card-2); }
+.btn:active { transform: scale(.97); }
+.btn:disabled { opacity: .45; transform: none; }
+.btn svg { width: 16px; height: 16px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; }
+.btn-sm { min-height: 34px; padding: 0 13px; font-size: 13px; }
+.btn-primary {
+  background: var(--card-ink);
+  color: var(--card);
+  border-color: transparent;
+}
+.btn-primary:hover { background: color-mix(in srgb, var(--card-ink) 86%, var(--card)); }
+.btn-quiet {
+  background: transparent;
+  border-color: transparent;
+}
+.btn-quiet:hover { background: var(--card-hover); }
+.btn-danger { color: var(--danger); }
+.btn-danger.is-arming { background: var(--danger); color: var(--card); border-color: transparent; }
+
+.spacer { flex: 1 1 auto; }
+
+/* ── Fields ────────────────────────────────────────────────── */
+.field-input,
+.select {
+  width: 100%;
+  min-height: 40px;
+  padding: 8px 12px;
+  border-radius: var(--r-sm);
+  border: 1px solid var(--card-line);
+  background: var(--card);
+  color: var(--card-ink);
+  transition: border-color var(--t-fast), box-shadow var(--t-fast);
+}
+.field-input:focus,
+.select:focus {
+  border-color: var(--focus);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--focus) 22%, transparent);
+}
+.select {
+  appearance: none;
+  padding-right: 32px;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23888' stroke-width='2' stroke-linecap='round'><path d='M7 10l5 5 5-5'/></svg>");
+  background-repeat: no-repeat;
+  background-position: right 9px center;
+  background-size: 16px;
+  cursor: pointer;
+}
+.field-error {
+  min-height: 1.2em;
+  margin: 6px 2px 0;
+  font-size: 13px;
+  color: var(--danger);
+}
+
+/* ── Switch (a styled checkbox) ────────────────────────────── */
+.switch {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  cursor: pointer;
+  user-select: none;
+}
+.switch input {
+  appearance: none;
+  flex-shrink: 0;
+  width: 36px;
+  height: 21px;
+  margin: 0;
+  border-radius: 99px;
+  background: color-mix(in srgb, var(--card-ink) 20%, transparent);
+  position: relative;
+  cursor: pointer;
+  transition: background var(--t) var(--ease-out);
+}
+.switch input::after {
+  content: '';
+  position: absolute;
+  top: 3px;
+  left: 3px;
+  width: 15px;
+  height: 15px;
+  border-radius: 50%;
+  background: var(--card);
+  box-shadow: 0 1px 2px rgba(0, 0, 0, .25);
+  transition: transform var(--t) var(--ease-spring);
+}
+.switch input:checked { background: var(--card-ink); }
+.switch input:checked::after { transform: translateX(15px); }
+.switch input:focus-visible { outline: 2px solid var(--focus); outline-offset: 2px; }
+
+/* ── Tooltips: data-tip="…" on any button ──────────────────── */
+[data-tip] { position: relative; }
+@media (hover: hover) {
+  [data-tip]::after {
+    content: attr(data-tip);
+    position: absolute;
+    top: calc(100% + 8px);
+    left: 50%;
+    z-index: 30;
+    padding: 5px 9px;
+    border-radius: 7px;
+    background: var(--card-ink);
+    color: var(--card);
+    font: 550 12px/1.2 var(--font-ui);
+    letter-spacing: .01em;
+    white-space: nowrap;
+    pointer-events: none;
+    opacity: 0;
+    transform: translate(-50%, -3px);
+    transition: opacity var(--t-fast) var(--ease-out), transform var(--t-fast) var(--ease-out);
+  }
+  [data-tip]:hover::after {
+    opacity: 1;
+    transform: translate(-50%, 0);
+    transition-delay: .45s;
+  }
+  [data-tip-up]::after { top: auto; bottom: calc(100% + 8px); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: .01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: .01ms !important;
+  }
+}

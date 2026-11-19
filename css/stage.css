@@ -1,0 +1,531 @@
+/* ═══════════════════════════════════════════════════════════════
+   JoyPro Timer Reloaded · stage.css
+   The frame (top bar), the stage (title, clock, meter, controls)
+   and the session-complete moment.
+   ═══════════════════════════════════════════════════════════════ */
+
+.app {
+  position: relative;
+  z-index: 2;
+  height: 100dvh;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr); /* never wider than the window */
+  grid-template-rows: auto minmax(0, 1fr) auto;
+}
+
+/* ── Top bar ───────────────────────────────────────────────── */
+.topbar {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: center;
+  gap: 12px;
+  padding: max(12px, env(safe-area-inset-top)) max(18px, env(safe-area-inset-right)) 8px max(18px, env(safe-area-inset-left));
+  color: var(--ink);
+  transition: color var(--t-slow) var(--ease-out);
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-width: 0;
+}
+.brand-logo {
+  flex-shrink: 0;
+  width: 30px;
+  height: 30px;
+  border-radius: 8px;
+  box-shadow: 0 0 0 1px rgba(255, 255, 255, .08), 0 2px 8px rgba(0, 0, 0, .18);
+}
+.brand-name {
+  font-weight: 650;
+  font-size: 15px;
+  letter-spacing: .01em;
+  white-space: nowrap;
+}
+.brand-name-thin { font-weight: 420; opacity: .7; }
+
+.session-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  max-width: min(46vw, 420px);
+  min-height: 36px;
+  padding: 0 14px;
+  border-radius: var(--r-pill);
+  border: 1px solid transparent;
+  background: transparent;
+  color: var(--ink);
+  font-size: 14px;
+  font-weight: 560;
+  transition: background var(--t-fast), border-color var(--t-fast);
+}
+.session-chip:hover {
+  background: var(--glass);
+  border-color: var(--glass-line);
+}
+.session-chip-name {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.session-chip-icon {
+  flex-shrink: 0;
+  width: 15px;
+  height: 15px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.8;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  opacity: 0;
+  transition: opacity var(--t-fast);
+}
+.session-chip:hover .session-chip-icon,
+.session-chip:focus-visible .session-chip-icon { opacity: .7; }
+.dirty-dot {
+  flex-shrink: 0;
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--sp-3);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--sp-3) 25%, transparent);
+  display: none;
+}
+.session-chip.is-dirty .dirty-dot { display: block; }
+
+.tools {
+  display: flex;
+  justify-content: flex-end;
+  gap: 2px;
+}
+.tools .icon-btn { opacity: .62; }
+.tools .icon-btn:hover,
+.tools .icon-btn:focus-visible,
+.tools .icon-btn[aria-expanded="true"] { opacity: 1; }
+#muteBtn .ico-muted { display: none; }
+#muteBtn[aria-pressed="true"] .ico-sound { display: none; }
+#muteBtn[aria-pressed="true"] .ico-muted { display: block; }
+#muteBtn[aria-pressed="true"] { opacity: 1; }
+
+/* ── Stage ─────────────────────────────────────────────────── */
+.stage {
+  position: relative;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: safe center;
+  padding: 8px 16px 18px;
+  overflow: clip;
+}
+/* In the Growing Tree the words sit up in the sky and the tree takes the ground. */
+html[data-theme="growingTree"] .stage {
+  justify-content: flex-start;
+  padding-top: min(4vh, 44px);
+}
+html[data-theme="growingTree"] .controls { margin-top: min(2.6vh, 26px); }
+
+.stage-inner {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  max-width: 100%;
+  transition: transform var(--t-slow) var(--ease-out), opacity var(--t-slow) var(--ease-out);
+}
+.stage-inner.is-hidden {
+  opacity: 0;
+  transform: translateY(-14px) scale(.98);
+  pointer-events: none;
+}
+
+.seg-eyebrow {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  margin: 0 0 6px;
+  font-size: 12px;
+  font-weight: 620;
+  letter-spacing: .16em;
+  text-transform: uppercase;
+  color: var(--ink-2);
+  text-shadow: 0 0 12px var(--halo);
+  transition: color var(--t-slow) var(--ease-out);
+}
+.seg-eyebrow-dot {
+  flex-shrink: 0;
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background: var(--seg-color, var(--sp-1));
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--seg-color, var(--sp-1)) 28%, transparent),
+    0 0 14px color-mix(in srgb, var(--seg-color, var(--sp-1)) 70%, transparent);
+  transition: background var(--t-slow), box-shadow var(--t-slow);
+}
+.seg-eyebrow-state:empty { display: none; }
+.seg-eyebrow-state {
+  padding: 2px 7px;
+  border-radius: var(--r-pill);
+  border: 1px solid var(--line);
+  letter-spacing: .1em;
+  font-size: 10.5px;
+}
+
+.seg-title {
+  margin: 0;
+  max-width: min(92vw, 1100px);
+  font-family: var(--font-display);
+  font-style: italic;
+  font-weight: var(--title-wght);
+  font-size: var(--title-size);
+  font-variation-settings: "SOFT" var(--title-soft), "WONK" var(--clock-wonk);
+  line-height: 1.12;
+  letter-spacing: -.005em;
+  text-align: center;
+  overflow-wrap: anywhere;
+  text-shadow: 0 0 .5em var(--halo);
+  cursor: default;
+  user-select: none;
+  transition: color var(--t-slow) var(--ease-out), font-variation-settings var(--t-slow) var(--ease-out);
+}
+.seg-title.is-editable { cursor: text; }
+.seg-title.is-editable:hover {
+  text-decoration: underline dotted color-mix(in srgb, var(--ink) 35%, transparent);
+  text-underline-offset: .18em;
+  text-decoration-thickness: 1px;
+}
+.title-input {
+  width: min(90vw, 900px);
+  font: inherit;
+  font-style: italic;
+  text-align: center;
+  color: inherit;
+  background: transparent;
+  border: 0;
+  border-bottom: 1.5px solid color-mix(in srgb, var(--ink) 40%, transparent);
+  padding: 0 0 2px;
+  field-sizing: content;
+  min-width: 6ch;
+  max-width: 90vw;
+}
+
+/* ── The clock ─────────────────────────────────────────────── */
+.clock-wrap {
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  margin-top: min(1.2vh, 12px);
+}
+
+.clock {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  font-family: var(--font-display);
+  font-size: var(--clock-size);
+  font-weight: var(--clock-wght);
+  font-variation-settings: "SOFT" var(--clock-soft), "WONK" var(--clock-wonk);
+  font-variant-numeric: lining-nums;
+  letter-spacing: var(--clock-track);
+  line-height: 1;
+  color: var(--ink);
+  text-shadow: 0 0 .28em var(--halo);
+  user-select: none;
+  transition: color var(--t-slow) var(--ease-out), font-variation-settings .7s var(--ease-out), font-weight .7s var(--ease-out);
+}
+.clock.is-editable { cursor: text; }
+.clock .slot {
+  position: relative;
+  display: inline-block;
+  width: var(--digit-w, .6em);
+  height: 1.06em;
+}
+.clock .glyph {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  will-change: transform, opacity;
+}
+.clock .sep {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: .3em;
+  height: 1.06em;
+  transform: translateY(-.05em);
+}
+/* Paused part-way: the colons breathe, the way paused clocks blink. */
+.clock.is-paused .sep { animation: colon-breathe 2.2s var(--ease-in-out) infinite; }
+@keyframes colon-breathe {
+  0%, 100% { opacity: 1; }
+  50% { opacity: .2; }
+}
+
+/* The time editor (double-click while paused) */
+.clock-edit {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.clock-edit .col {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.clock-edit input {
+  width: calc(var(--digit-w, .6em) * 2 + .04em);
+  height: 1.06em;
+  padding: 0;
+  border: 0;
+  border-radius: .06em;
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  font-variation-settings: inherit;
+  letter-spacing: inherit;
+  line-height: 1;
+  text-align: center;
+  caret-color: var(--sp-4);
+  transition: background var(--t-fast);
+}
+.clock-edit input:hover { background: color-mix(in srgb, var(--ink) 5%, transparent); }
+.clock-edit input:focus {
+  background: color-mix(in srgb, var(--ink) 7%, transparent);
+  outline: none;
+  box-shadow: inset 0 -.03em 0 var(--seg-color, var(--sp-4));
+}
+.clock-edit input::selection { background: color-mix(in srgb, var(--seg-color, var(--sp-4)) 38%, transparent); }
+.clock-edit .col.is-zero input:not(:focus) { opacity: .32; }
+.clock-edit .chev {
+  position: absolute;
+  left: 50%;
+  width: 56px;
+  height: 34px;
+  margin-left: -28px;
+  display: grid;
+  place-items: center;
+  border: 0;
+  border-radius: 12px;
+  background: transparent;
+  color: inherit;
+  opacity: .6;
+  transition: opacity var(--t-fast), background var(--t-fast);
+}
+.clock-edit .chev:hover { opacity: 1; background: color-mix(in srgb, var(--ink) 9%, transparent); }
+.clock-edit .chev.up { bottom: calc(100% + 2px); }
+.clock-edit .chev.down { top: calc(100% + 2px); }
+.clock-edit .chev svg { width: 26px; height: 26px; fill: none; stroke: currentColor; stroke-width: 2.2; stroke-linecap: round; stroke-linejoin: round; }
+.clock-edit .sep { animation: none; }
+
+/* ── Segment meter ─────────────────────────────────────────── */
+.meter {
+  flex-shrink: 0;
+  position: relative;
+  height: 3px;
+  margin: min(1.4vh, 14px) .1em 0;
+  border-radius: 3px;
+  background: color-mix(in srgb, var(--ink) 13%, transparent);
+  transition: background var(--t-slow);
+}
+.meter-fill {
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: var(--seg-color, var(--sp-1));
+  transform-origin: left center;
+  transform: scaleX(var(--p, 0));
+}
+.meter::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: calc(var(--p, 0) * 100%);
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background: var(--seg-color, var(--sp-1));
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--seg-color, var(--sp-1)) 30%, transparent),
+    0 0 16px var(--seg-color, var(--sp-1));
+  transform: translate(-50%, -50%) scale(var(--head, 0));
+  transition: transform var(--t) var(--ease-spring);
+}
+
+/* ── Controls: quiet at rest (Adam's call), full on hover, focus and touch ── */
+.controls {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  margin-top: min(3.6vh, 34px);
+  opacity: .45;
+  transition: opacity var(--t) var(--ease-out);
+}
+.controls:hover,
+.controls:focus-within { opacity: 1; }
+@media (hover: none) {
+  .controls { opacity: 1; }
+}
+
+.ctrl {
+  flex-shrink: 0;
+  width: 46px;
+  height: 46px;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  border: 1px solid color-mix(in srgb, var(--ink) 24%, transparent);
+  background: transparent;
+  color: var(--ink);
+  transition: background var(--t-fast), transform var(--t-fast) var(--ease-out), border-color var(--t-fast), color var(--t-slow);
+}
+.ctrl:hover { background: color-mix(in srgb, var(--ink) 9%, transparent); }
+.ctrl:active { transform: scale(.92); }
+.ctrl svg {
+  width: 20px;
+  height: 20px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.8;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+#nextBtn svg path:first-child { fill: currentColor; stroke: none; }
+.ctrl-main {
+  width: 64px;
+  height: 64px;
+  border: 0;
+  background: var(--ink);
+  color: var(--on-ink);
+  box-shadow: 0 10px 26px -10px color-mix(in srgb, var(--ink) 70%, transparent);
+}
+.ctrl-main:hover { background: color-mix(in srgb, var(--ink) 88%, var(--on-ink)); }
+.ctrl-main svg { width: 24px; height: 24px; fill: currentColor; stroke: none; }
+.ctrl-main .ico-pause { display: none; }
+.is-running .ctrl-main .ico-play { display: none; }
+.is-running .ctrl-main .ico-pause { display: block; }
+.ctrl[data-tip]::after { top: auto; bottom: calc(100% + 10px); }
+
+/* ── Session complete ──────────────────────────────────────── */
+.complete {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: safe center;
+  gap: 12px;
+  padding: 24px;
+  text-align: center;
+  color: var(--ink);
+}
+html[data-theme="growingTree"] .complete {
+  justify-content: flex-start;
+  padding-top: min(9vh, 96px);
+}
+.complete[hidden] { display: none; }
+.complete > * { animation: complete-rise .9s var(--ease-out) both; }
+.complete > :nth-child(2) { animation-delay: .08s; }
+.complete > :nth-child(3) { animation-delay: .18s; }
+.complete > :nth-child(4) { animation-delay: .26s; }
+.complete > :nth-child(5) { animation-delay: .5s; }
+@keyframes complete-rise {
+  from { opacity: 0; transform: translateY(16px); }
+  to { opacity: 1; transform: none; }
+}
+.complete-eyebrow {
+  margin: 0;
+  font-size: 12px;
+  font-weight: 620;
+  letter-spacing: .2em;
+  text-transform: uppercase;
+  color: var(--ink-2);
+  text-shadow: 0 0 12px var(--halo);
+}
+.complete-title {
+  margin: 0;
+  max-width: 16ch;
+  font-family: var(--font-display);
+  font-style: italic;
+  font-weight: var(--title-wght);
+  font-size: min(8vw, 9vh, 92px);
+  font-variation-settings: "SOFT" var(--title-soft), "WONK" var(--clock-wonk);
+  line-height: 1.04;
+  text-wrap: balance;
+  text-shadow: 0 0 .5em var(--halo);
+}
+.complete-stats {
+  margin: 0;
+  font-size: 16px;
+  color: var(--ink-2);
+  text-shadow: 0 0 12px var(--halo);
+}
+.complete-spectrum {
+  width: min(360px, 70vw);
+  height: 6px;
+  margin: 10px 0 14px;
+  border-radius: 6px;
+  background: var(--spectrum);
+  box-shadow: 0 0 24px rgba(212, 77, 141, .35);
+  transform-origin: left center;
+  animation: complete-rise .9s var(--ease-out) .26s both, paint 1.6s var(--ease-out) .3s both !important;
+}
+@keyframes paint {
+  from { transform: scaleX(0); }
+  to { transform: scaleX(1); }
+}
+.complete .btn-primary {
+  min-height: 46px;
+  padding: 0 24px;
+  background: var(--ink);
+  color: var(--on-ink);
+}
+
+/* ── The first moment: everything settles into place ───────── */
+.app.is-entering .topbar { animation: enter-down .8s var(--ease-out) both; }
+.app.is-entering .stage-inner > * { animation: enter-up .9s var(--ease-out) both; }
+.app.is-entering .stage-inner > :nth-child(2) { animation-delay: .07s; }
+.app.is-entering .stage-inner > :nth-child(3) { animation-delay: .14s; }
+.app.is-entering .stage-inner > :nth-child(4) { animation-delay: .24s; }
+.app.is-entering .dock { animation: enter-up .9s var(--ease-out) .3s both; }
+@keyframes enter-up {
+  from { opacity: 0; transform: translateY(18px); filter: blur(4px); }
+  to { opacity: 1; transform: none; filter: none; }
+}
+@keyframes enter-down {
+  from { opacity: 0; transform: translateY(-10px); }
+  to { opacity: 1; transform: none; }
+}
+
+/* ── Room for the editor on wide screens ───────────────────── */
+@media (min-width: 1180px) {
+  .app.sheet-open .stage-inner:not(.is-hidden),
+  .app.sheet-open .complete { transform: translateX(-210px); }
+  .app.sheet-open .complete { transition: transform var(--t-slow) var(--ease-out); }
+}
+
+/* ── Small screens ─────────────────────────────────────────── */
+@media (max-width: 640px) {
+  :root { --clock-size: min(21vw, 22vh, 236px); --title-size: min(7.6vw, 5.4vh, 40px); }
+  html[data-theme="growingTree"] { --clock-size: min(19vw, 19vh, 210px); }
+  html[data-theme="growingTree"] .stage { padding-top: min(7vh, 70px); }
+  .brand-name { display: none; }
+  .topbar {
+    grid-template-columns: auto minmax(0, 1fr) auto;
+    gap: 6px;
+    padding-left: max(12px, env(safe-area-inset-left));
+    padding-right: max(8px, env(safe-area-inset-right));
+  }
+  .session-chip { justify-self: center; max-width: 100%; min-width: 0; padding: 0 10px; }
+  .tools { gap: 0; }
+  .tools .icon-btn { width: 36px; height: 36px; }
+  .controls { gap: 14px; }
+}
+@media (max-height: 520px) {
+  .controls { margin-top: 10px; }
+  .ctrl { width: 40px; height: 40px; }
+  .ctrl-main { width: 52px; height: 52px; }
+}

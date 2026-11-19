@@ -1,0 +1,181 @@
+/* ═══════════════════════════════════════════════════════════════
+   JoyPro Timer Reloaded · tokens.css
+   Design tokens and the four themes.
+
+   Two families of ink:
+     --ink, --ink-2, --ink-3      text that sits on the page or scene
+     --card-ink, --card-ink-2 ... text on cards (editor, dialogs, menus)
+   Animated scenes (Growing Tree) change the page ink live, as the
+   sky darkens, while cards keep a steady, readable surface.
+   ═══════════════════════════════════════════════════════════════ */
+
+:root {
+  /* Type: Fraunces for the time and titles, Instrument Sans for everything else */
+  --font-display: 'Fraunces', 'Iowan Old Style', 'Palatino Linotype', Palatino, Georgia, serif;
+  --font-ui: 'Instrument Sans', 'Segoe UI Variable Text', 'Segoe UI', -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
+
+  /* The JoyPro spectrum, sampled from the logo */
+  --sp-1: #E9DA3B; --sp-2: #F0A23F; --sp-3: #EB6D45; --sp-4: #D44D8D;
+  --sp-5: #8D5CC9; --sp-6: #2F70C9; --sp-7: #39A3B8;
+  --spectrum: linear-gradient(90deg, var(--sp-1), var(--sp-2), var(--sp-3), var(--sp-4), var(--sp-5), var(--sp-6), var(--sp-7));
+
+  /* Shape */
+  --r-xs: 6px;
+  --r-sm: 10px;
+  --r-md: 14px;
+  --r-lg: 22px;
+  --r-pill: 999px;
+
+  /* Motion */
+  --ease-out: cubic-bezier(.2, .8, .2, 1);
+  --ease-in-out: cubic-bezier(.65, 0, .35, 1);
+  --ease-spring: cubic-bezier(.34, 1.45, .64, 1);
+  --t-fast: 140ms;
+  --t: 240ms;
+  --t-slow: 520ms;
+
+  /* The clock's voice: each theme tunes Fraunces' weight and its SOFT/WONK axes */
+  --clock-size: min(16.5vw, 26vh, 236px);
+  --clock-wght: 330;
+  --clock-soft: 0;
+  --clock-wonk: 0;
+  --clock-track: -0.015em;
+  --title-size: min(6.4vw, 5.8vh, 58px);
+  --title-wght: 360;
+  --title-soft: 30;
+
+  /* Light (default values) */
+  --bg: #F4EFE6;
+  --bg-deep: #E9E1D3;
+  --ink: #1D1915;
+  --ink-2: #5E564C;
+  --ink-3: #8E8578;
+  --on-ink: #FBF7F0;
+  --line: rgba(29, 25, 21, .12);
+  --glass: rgba(255, 251, 244, .66);
+  --glass-line: rgba(29, 25, 21, .09);
+  --halo: transparent;
+
+  --card: #FFFCF7;
+  --card-2: #F6F0E6;
+  --card-ink: #1D1915;
+  --card-ink-2: #5E564C;
+  --card-ink-3: #8E8578;
+  --card-line: rgba(29, 25, 21, .11);
+  --card-scheme: light;
+  --card-hover: rgba(29, 25, 21, .05);
+
+  --danger: #B9442C;
+  --focus: #2F70C9;
+  --shadow-sm: 0 1px 2px rgba(48, 34, 18, .06), 0 3px 10px rgba(48, 34, 18, .05);
+  --shadow-lg: 0 30px 70px -18px rgba(48, 34, 18, .32), 0 10px 24px -12px rgba(48, 34, 18, .16);
+  --backdrop: rgba(32, 24, 16, .32);
+
+  --grain: .08;
+  --grain-blend: multiply;
+}
+
+/* ── Dark ──────────────────────────────────────────────────── */
+html[data-theme="dark"] {
+  --bg: #0F1016;
+  --bg-deep: #08090D;
+  --ink: #F1ECE3;
+  --ink-2: #ABA598;
+  --ink-3: #726D65;
+  --on-ink: #101118;
+  --line: rgba(241, 236, 227, .11);
+  --glass: rgba(26, 28, 38, .62);
+  --glass-line: rgba(241, 236, 227, .08);
+
+  --card: #181A23;
+  --card-2: #1F222D;
+  --card-ink: #F1ECE3;
+  --card-ink-2: #ABA598;
+  --card-ink-3: #77726A;
+  --card-line: rgba(241, 236, 227, .1);
+  --card-scheme: dark;
+  --card-hover: rgba(241, 236, 227, .06);
+
+  --danger: #F08A73;
+  --focus: #7FA8F0;
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, .3), 0 3px 10px rgba(0, 0, 0, .25);
+  --shadow-lg: 0 30px 70px -18px rgba(0, 0, 0, .7), 0 10px 24px -12px rgba(0, 0, 0, .5);
+  --backdrop: rgba(0, 0, 0, .5);
+
+  --clock-wght: 300;
+  --grain: .06;
+  --grain-blend: soft-light;
+}
+
+/* ── Starry Night: the original's indigo sky and lavender accent ── */
+html[data-theme="starryNight"] {
+  --bg: #0b0e2a;
+  --bg-deep: #07091d;
+  --ink: #EDE6F6;
+  --ink-2: #A99FCB;
+  --ink-3: #6F6896;
+  --on-ink: #0b0e2a;
+  --line: rgba(237, 230, 246, .12);
+  --glass: rgba(10, 12, 40, .5);
+  --glass-line: rgba(200, 155, 255, .12);
+  --halo: rgba(200, 155, 255, .16);
+
+  --card: #121539;
+  --card-2: #1A1D48;
+  --card-ink: #EDE6F6;
+  --card-ink-2: #A99FCB;
+  --card-ink-3: #7A73A3;
+  --card-line: rgba(200, 155, 255, .14);
+  --card-scheme: dark;
+  --card-hover: rgba(200, 155, 255, .08);
+
+  --danger: #FF9C86;
+  --focus: #C89BFF;
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, .35), 0 3px 10px rgba(0, 0, 0, .3);
+  --shadow-lg: 0 30px 70px -18px rgba(0, 0, 0, .75), 0 10px 24px -12px rgba(0, 0, 0, .55);
+  --backdrop: rgba(3, 4, 18, .55);
+
+  --clock-wght: 250;
+  --clock-soft: 60;
+  --title-soft: 80;
+  --grain: .05;
+  --grain-blend: soft-light;
+}
+
+/* ── Growing Tree: the scene writes --scene-* live as the day passes ── */
+html[data-theme="growingTree"] {
+  --bg: #A9D8EE;
+  --bg-deep: #6FA35B;
+  --ink: var(--scene-ink, #1E2A1C);
+  --ink-2: var(--scene-ink-2, #46553F);
+  --ink-3: var(--scene-ink-3, #6E7C66);
+  --on-ink: var(--scene-on-ink, #F8F5EC);
+  --line: var(--scene-line, rgba(30, 42, 28, .16));
+  --glass: var(--scene-glass, rgba(255, 253, 245, .5));
+  --glass-line: var(--scene-glass-line, rgba(255, 255, 255, .5));
+  --halo: var(--scene-halo, rgba(255, 255, 255, .4));
+
+  --card: #FFFCF4;
+  --card-2: #F4EFE1;
+  --card-ink: #1F2A1D;
+  --card-ink-2: #55604E;
+  --card-ink-3: #879080;
+  --card-line: rgba(31, 42, 29, .12);
+  --card-scheme: light;
+  --card-hover: rgba(31, 42, 29, .05);
+
+  --danger: #B9442C;
+  --focus: #2F70C9;
+  --backdrop: rgba(20, 32, 24, .3);
+
+  --clock-size: min(14vw, 19vh, 196px);
+  --title-size: min(5.6vw, 5.2vh, 52px);
+  --clock-wght: 440;
+  --clock-soft: 100;
+  --clock-wonk: 1;
+  --clock-track: -0.005em;
+  --title-wght: 420;
+  --title-soft: 100;
+  --grain: .05;
+  --grain-blend: soft-light;
+}

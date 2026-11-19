@@ -1,0 +1,165 @@
+/* ═══════════════════════════════════════════════════════════════
+   JoyPro Timer Reloaded · dock.css
+   The dock: the whole session as a ribbon of the JoyPro spectrum,
+   each segment as wide as it is long. Click one to jump to it.
+   ═══════════════════════════════════════════════════════════════ */
+
+.dock {
+  position: relative;
+  margin: 0 max(14px, env(safe-area-inset-right)) max(14px, env(safe-area-inset-bottom)) max(14px, env(safe-area-inset-left));
+  padding: 12px 14px 8px;
+  border-radius: 20px;
+  background: var(--glass);
+  border: 1px solid var(--glass-line);
+  -webkit-backdrop-filter: blur(18px) saturate(1.35);
+  backdrop-filter: blur(18px) saturate(1.35);
+  box-shadow: 0 18px 40px -24px rgba(0, 0, 0, .35);
+  color: var(--ink);
+  transition: background var(--t-slow) var(--ease-out), border-color var(--t-slow), color var(--t-slow), padding var(--t) var(--ease-out);
+}
+
+/* ── Ribbon ────────────────────────────────────────────────── */
+.ribbon {
+  display: flex;
+  align-items: stretch;
+  gap: 3px;
+  min-width: 0;
+}
+
+.rb-seg {
+  flex: var(--w, 1) 1 0;
+  min-width: 10px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  gap: 7px;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: inherit;
+  text-align: left;
+  container-type: inline-size;
+  cursor: pointer;
+}
+.rb-label {
+  display: flex;
+  align-items: baseline;
+  gap: 6px;
+  min-width: 0;
+  padding: 0 2px;
+  font-size: 12.5px;
+  font-weight: 520;
+  line-height: 1.2;
+  color: var(--ink-2);
+  white-space: nowrap;
+  transition: color var(--t), opacity var(--t);
+}
+.rb-name { overflow: hidden; text-overflow: ellipsis; }
+.rb-dur {
+  flex-shrink: 0;
+  font-size: 11.5px;
+  color: var(--ink-3);
+  font-variant-numeric: tabular-nums;
+}
+@container (max-width: 92px) { .rb-dur { display: none; } }
+@container (max-width: 46px) { .rb-label { visibility: hidden; } }
+
+.rb-bar {
+  position: relative;
+  flex-shrink: 0;
+  height: 8px;
+  border-radius: 5px;
+  background: color-mix(in srgb, var(--c) 26%, transparent);
+  overflow: clip;
+  transition: height var(--t) var(--ease-out), box-shadow var(--t-slow), transform var(--t-fast) var(--ease-out);
+}
+.rb-fill {
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: var(--c);
+  transform-origin: left center;
+  transform: scaleX(var(--p, 0));
+}
+.rb-seg.is-done .rb-label { color: var(--ink-3); }
+.rb-seg.is-current .rb-label { color: var(--ink); font-weight: 650; }
+.rb-seg.is-current .rb-bar {
+  height: 10px;
+  box-shadow: 0 0 0 1px color-mix(in srgb, var(--c) 55%, transparent), 0 0 18px -2px color-mix(in srgb, var(--c) 75%, transparent);
+}
+.rb-seg:hover .rb-bar { transform: scaleY(1.25); }
+.rb-seg:focus-visible { outline-offset: 4px; }
+
+/* A tooltip for segments too narrow to label */
+.rb-seg[data-tip]::after { top: auto; bottom: calc(100% + 8px); }
+
+/* ── Meta row ──────────────────────────────────────────────── */
+.dock-meta {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  min-height: 34px;
+  margin-top: 6px;
+  font-size: 13px;
+  color: var(--ink-2);
+}
+.dock-left {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-variant-numeric: tabular-nums;
+}
+.dock-hint {
+  flex: 1 1 auto;
+  text-align: center;
+  white-space: nowrap;
+  overflow: hidden;
+  font-size: 12px;
+  color: var(--ink-3);
+  opacity: .9;
+}
+.dock-hint kbd { margin: 0 2px 0 8px; font-size: 10.5px; }
+.dock-right {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-left: auto;
+}
+.dock-ends {
+  white-space: nowrap;
+  font-variant-numeric: tabular-nums;
+}
+.dock .btn-quiet { color: var(--ink); }
+.dock .btn-quiet:hover { background: color-mix(in srgb, var(--ink) 9%, transparent); }
+#collapseBtn svg { transition: transform var(--t) var(--ease-out); }
+
+/* ── Collapsed: a slim strip, the ribbon without words ─────── */
+.dock.is-collapsed {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 6px 8px 6px 14px;
+}
+.dock.is-collapsed .ribbon { flex: 1; }
+.dock.is-collapsed .rb-label { display: none; }
+.dock.is-collapsed .rb-bar { height: 6px; }
+.dock.is-collapsed .rb-seg.is-current .rb-bar { height: 7px; }
+.dock.is-collapsed .dock-meta { margin: 0; min-height: 0; }
+.dock.is-collapsed .dock-left,
+.dock.is-collapsed .dock-hint,
+.dock.is-collapsed .dock-ends,
+.dock.is-collapsed #editBtn { display: none; }
+.dock.is-collapsed #collapseBtn svg { transform: rotate(180deg); }
+
+@media (max-width: 760px) {
+  .dock-hint { display: none; }
+}
+@media (max-width: 520px) {
+  .dock { padding: 10px 10px 6px; border-radius: 18px; }
+  .dock-left { font-size: 12px; }
+  #editBtn { padding: 0 10px; }
+}
+@media (hover: none) {
+  .dock-hint { display: none; }
+}

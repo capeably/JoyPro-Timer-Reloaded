@@ -1,0 +1,5 @@
+# Local scratch space (see CLAUDE.md, "Where things live")
+/_Workbench/
+
+# Claude Code local overrides (machine-specific permissions/paths)
+.claude/settings.local.json
