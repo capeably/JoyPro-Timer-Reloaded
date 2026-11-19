@@ -5,6 +5,8 @@
 
      node tests/shoot.js                 every scenario
      node tests/shoot.js tree themes     just these
+     JP_URL=https://capeably.github.io/JoyPro-Timer-Reloaded/ node tests/shoot.js themes
+                                         against the live page
 
    Shots land in _Workbench/_Inbox/shots/ (gitignored). Console
    errors and uncaught exceptions are printed and fail the run.
@@ -24,7 +26,8 @@ const CHROME = process.env.CHROME || [
   'C:/Program Files/Google/Chrome/Application/chrome.exe',
   'C:/Program Files (x86)/Microsoft/Edge/Application/msedge.exe'
 ].find(p => fs.existsSync(p));
-const INDEX = pathToFileURL(path.join(ROOT, 'index.html')).href;
+// JP_URL runs the checks against another copy, such as the live page
+const INDEX = process.env.JP_URL || pathToFileURL(path.join(ROOT, 'index.html')).href;
 
 const sleep = ms => new Promise(r => setTimeout(r, ms));
 const getJSON = url => new Promise((resolve, reject) => {

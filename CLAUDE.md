@@ -28,7 +28,8 @@ This folder sits inside the Obsidian vault rooted at `C:\Users\Adam\Projects`, s
 - `_Reference/`: documents for people, such as the feature parity checklist.
 - `_Workbench/`: gitignored local scratch space. `_Inbox/` takes the working files of a task in progress (screenshots land in `_Inbox/shots/`); when the task is finished they move to `_Archive/` or wherever they belong.
 - `ROADMAP.md`: the task list (see below).
-- GitHub: `capeably/JoyPro-Timer-Reloaded`, public, branch `master`. The original stays at `capeably/JoyPro-Timer`.
+- `README.md`: the GitHub front page, for people; its images are in `_Reference/screenshots/`.
+- GitHub: `capeably/JoyPro-Timer-Reloaded`, public, branch `master`, live at https://capeably.github.io/JoyPro-Timer-Reloaded/ (GitHub Pages, served from `master`). `.nojekyll` serves the files as they are: Jekyll would skip the `_` folders and process the Markdown. The original stays at `capeably/JoyPro-Timer`.
 
 ## Keeping notes
 
